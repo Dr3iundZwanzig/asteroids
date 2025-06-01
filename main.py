@@ -23,6 +23,8 @@ def main():
     AsteroidField.containers = (updatable)
     
     dt = 0
+    lifes = 3
+    score = 0
 
     player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
     asteroid_field = AsteroidField()
@@ -37,13 +39,25 @@ def main():
 
         for a in asteroids:
             if player.collision(a):
-                print("Game over!")
-                return
+                if lifes <= 1:
+                    print("Game over!!!")
+                    print(f"Score: {score}")
+                    return
+                lifes -= 1
+                for a in asteroids:
+                    a.kill()
+                player.kill()
+                player = Player((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+                print("lost one life")
+                print(f"lifes remaining: {lifes}")
+                print("respawning")
         
             for s in shot:
                 if s.collision(a):
                     a.split()
                     s.kill()
+                    score += 1
+                    print("+1 point")
 
         screen.fill("black")
         for i in drawable:          
